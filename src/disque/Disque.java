@@ -15,7 +15,6 @@ public class Disque extends JPanel {
     // attributs
     private GregorianCalendar calendar = new GregorianCalendar();
     private DisqueHoraire disqueHoraire;
-    private JPanel interf;
     private JButton moisPred;
     private JButton moisProc;
     private JButton jourPred;
@@ -38,19 +37,18 @@ public class Disque extends JPanel {
         setHeurProc(new JButton("Heure suivante >"));
 
         // (2) Creer l'interface pour ajouter les boutons et le disque
-        setInterf(new JPanel(new BorderLayout()));
-        interf.add(getDisque(), BorderLayout.WEST);
-        
-        JPanel boutons = new JPanel(new GridLayout(6,1));
+        BorderLayout layout1 = new BorderLayout();
+        this.setLayout(layout1);
+        this.add(getDisque(), BorderLayout.WEST);
+
+        JPanel boutons = new JPanel(new GridLayout(6, 1));
         boutons.add(moisPred);
         boutons.add(moisProc);
         boutons.add(jourPred);
         boutons.add(jourProc);
         boutons.add(heurPred);
         boutons.add(heurProc);
-        interf.add(boutons, BorderLayout.EAST);
-        
-        interf.setVisible(true);
+        this.add(boutons, BorderLayout.EAST);
         
         // (3) S'abonner aux boutons pour controler la date : utiliser
         // les méthodes ci-dessous
@@ -87,10 +85,6 @@ public class Disque extends JPanel {
 
     public void setHeurProc(JButton heurProc) {
         this.heurProc = heurProc;
-    }
-
-    public void setInterf(JPanel interf) {
-        this.interf = interf;
     }
 
     private void setDate() {
@@ -138,10 +132,6 @@ public class Disque extends JPanel {
 
     public JButton getHeurProc() {
         return heurProc;
-    }
-
-    public JPanel getInterf() {
-        return interf;
     }
 
     // autres méthodes
