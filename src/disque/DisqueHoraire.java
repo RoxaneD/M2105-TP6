@@ -39,6 +39,8 @@ public class DisqueHoraire extends JPanel {
 
     private boolean bissextile = false;
     private int mois = 4, jour = 4, heure = 4, minutes = 4;
+    
+    private int indiceMois;
 
     private Circle cercleJour;
     private Circle cercleMois;
@@ -127,10 +129,7 @@ public class DisqueHoraire extends JPanel {
         int x1, y1, x2, y2;
 
         for (int i = 0; i < 12; i++) {
-            // Calcul de l'angle en degré d'abord pour simplifier (mais non nécessaire)
-            // La méthode toRadians permet de convertir la valeur en degré 
-            // vers une valeur en radian, ce qui est nécessaire pour appliquer 
-            // les fonctions cosinus et sinus
+            // Calcul de l'angle (en radians)
             double angle = Math.toRadians(((i * 360.0) / 12)+15);
 
             // calcul de x1, y1, x2 et y2
@@ -151,11 +150,47 @@ public class DisqueHoraire extends JPanel {
     }
 
     private void afficherJours(Graphics g) {
-        // A FAIRE
+        TextLabel label;
+        int x1, y1, x2, y2;
+
+        for (int i = 0; i < NB_JOURS.length; i++) {
+            // Calcul de l'angle (en radians)
+            double angle = Math.toRadians(((i * 360.0) / NB_JOURS[i]));
+
+            // calcul de x1, y1, x2 et y2
+            x1 = (int) (CENTRE_X + RAYON_JOUR * cos(angle));
+            x2 = (int) (CENTRE_X + RAYON_MOIS * cos(angle));
+            y1 = (int) (CENTRE_Y + RAYON_JOUR * sin(angle));
+            y2 = (int) (CENTRE_Y + RAYON_MOIS * sin(angle));
+
+            // Dessiner les sections
+            g.setColor(Color.BLACK);
+            g.drawLine(x1, y1, x2, y2);
+
+            // Afficher les jours
+        }
     }
 
     private void afficherHeures(Graphics g) {
-        // A FAIRE
+        TextLabel label;
+        int x1, y1, x2, y2;
+
+        for (int i = 0; i < 48; i++) {
+            // Calcul de l'angle (en radians)
+            double angle = Math.toRadians(((i * 360.0) / 48)+3.75);
+
+            // calcul de x1, y1, x2 et y2
+            x1 = (int) (CENTRE_X + RAYON_HEURES * cos(angle));
+            x2 = (int) (CENTRE_X + RAYON_CONTOUR * cos(angle));
+            y1 = (int) (CENTRE_Y + RAYON_HEURES * sin(angle));
+            y2 = (int) (CENTRE_Y + RAYON_CONTOUR * sin(angle));
+
+            // Dessiner les sections
+            g.setColor(Color.BLACK);
+            g.drawLine(x1, y1, x2, y2);
+
+            // Afficher les heures
+        }
     }
 
     private void afficherCurseur(Graphics g) {
