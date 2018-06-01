@@ -10,6 +10,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 import javax.swing.JPanel;
 
 /**
@@ -59,6 +61,7 @@ public class DisqueHoraire extends JPanel {
         setCercleMois(cercle2);
         setCercleHeures(cercle3);
         setCercleContour(cercle4);
+
     }
 
     // setteurs
@@ -125,21 +128,25 @@ public class DisqueHoraire extends JPanel {
 
         for (int i = 0; i < 12; i++) {
             // Calcul de l'angle en degré d'abord pour simplifier (mais non nécessaire)
-            //
             // La méthode toRadians permet de convertir la valeur en degré 
             // vers une valeur en radian, ce qui est nécessaire pour appliquer 
             // les fonctions cosinus et sinus
-            double angle = Math.toRadians((i * 360.0) / 12);
+            double angle = Math.toRadians(((i * 360.0) / 12)+15);
+
+            // calcul de x1, y1, x2 et y2
+            x1 = (int) (CENTRE_X + RAYON_MOIS * cos(angle));
+            x2 = (int) (CENTRE_X + RAYON_HEURES * cos(angle));
+            y1 = (int) (CENTRE_Y + RAYON_MOIS * sin(angle));
+            y2 = (int) (CENTRE_Y + RAYON_HEURES * sin(angle));
 
             // Dessiner les sections
             g.setColor(Color.BLACK);
+            g.drawLine(x1, y1, x2, y2);
 
-            // A FAIRE
             // Afficher les mois
             g.setColor(i == 0 ? Color.RED : Color.BLACK);
-
-            // A FAIRE
-            //label = new TextLabel(?????)
+            label = new TextLabel(MOIS[i].toString(), x1, y1, angle);
+            label.draw(g, x2, y2);
         }
     }
 
@@ -153,6 +160,8 @@ public class DisqueHoraire extends JPanel {
 
     private void afficherCurseur(Graphics g) {
 
+        g.setColor(Color.white);
+        g.fillOval(20, 20, 2 * RAYON_CONTOUR, 2 * RAYON_CONTOUR);
         // Section pour les heures
         g.setColor(new Color(192, 192, 192, 127));
         g.fillArc(20, 20,

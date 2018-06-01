@@ -6,6 +6,7 @@
 package disque;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.*;
 import javax.swing.*;
@@ -48,10 +49,13 @@ public class Disque extends JPanel {
         boutons.add(jourProc);
         boutons.add(heurPred);
         boutons.add(heurProc);
-        this.add(boutons, BorderLayout.EAST);
+        JPanel conteneurBoutons = new JPanel(new BorderLayout());
+        conteneurBoutons.add(boutons, BorderLayout.NORTH);
+        this.add(conteneurBoutons, BorderLayout.EAST);
         
         // (3) S'abonner aux boutons pour controler la date : utiliser
         // les méthodes ci-dessous
+        
     }
 
     // setteurs
