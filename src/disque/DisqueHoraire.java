@@ -38,8 +38,11 @@ public class DisqueHoraire extends JPanel {
     private static final int CENTRE_Y = RAYON_CONTOUR + 20;
 
     private boolean bissextile = false;
-    private int mois = 4, jour = 4, heure = 4, minutes = 4;
-    
+    private int mois = 4;
+    private int jour = 4;
+    private int heure = 4;
+    private int minutes = 4;
+
     private int indiceMois;
 
     private Circle cercleJour;
@@ -100,6 +103,22 @@ public class DisqueHoraire extends JPanel {
         return cercleContour;
     }
 
+    public int getMois() {
+        return mois;
+    }
+
+    public int getJour() {
+        return jour;
+    }
+
+    public int getHeure() {
+        return heure;
+    }
+
+    public int getMinutes() {
+        return minutes;
+    }
+
     // autres méthodes
     public void paintComponent(Graphics g) {
         ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -127,10 +146,10 @@ public class DisqueHoraire extends JPanel {
     private void afficherMois(Graphics g) {
         TextLabel label;
         int x1, y1, x2, y2;
-
-        for (int i = 0; i < 12; i++) {
+        int i = 0;
+        while (i < 12) {
             // Calcul de l'angle (en radians)
-            double angle = Math.toRadians(((i * 360.0) / 12)+15);
+            double angle = Math.toRadians(((i * 360.0) / 12) + 15);
 
             // calcul de x1, y1, x2 et y2
             x1 = (int) (CENTRE_X + RAYON_MOIS * cos(angle));
@@ -143,19 +162,34 @@ public class DisqueHoraire extends JPanel {
             g.drawLine(x1, y1, x2, y2);
 
             // Afficher les mois
-            g.setColor(i == 0 ? Color.RED : Color.BLACK);
-            label = new TextLabel(MOIS[i].toString(), x1, y1, angle);
-            label.draw(g, x2, y2);
+            if (i + getMois() >= 12) {
+                g.setColor(Color.BLACK);
+                label = new TextLabel(MOIS[0 - (12 - getMois()) + i].toString(), CENTRE_X, CENTRE_Y, angle);
+                label.draw(g, RAYON_MOIS, 0);
+            } else {
+                g.setColor(i == 0 ? Color.RED : Color.BLACK);
+                label = new TextLabel(MOIS[i + getMois()].toString(), CENTRE_X, CENTRE_Y, angle);
+                label.draw(g, RAYON_MOIS, 0);
+            }
+            i += 1;
         }
     }
 
     private void afficherJours(Graphics g) {
         TextLabel label;
         int x1, y1, x2, y2;
+        Integer num = 0;
+        Integer num2 = 0;
+        int nombreJour;
 
-        for (int i = 0; i < NB_JOURS.length; i++) {
+        if (bissextile && getMois() == 1) {
+            nombreJour = 29;
+        } else {
+            nombreJour = NB_JOURS[getMois()];
+        }
+        for (int i = 0; i < nombreJour; i++) {
             // Calcul de l'angle (en radians)
-            double angle = Math.toRadians(((i * 360.0) / NB_JOURS[i]));
+            double angle = Math.toRadians(((i * 360.0) / nombreJour) + ((360 / nombreJour) * 0.5));
 
             // calcul de x1, y1, x2 et y2
             x1 = (int) (CENTRE_X + RAYON_JOUR * cos(angle));
@@ -168,6 +202,18 @@ public class DisqueHoraire extends JPanel {
             g.drawLine(x1, y1, x2, y2);
 
             // Afficher les jours
+            if (i + getJour() > nombreJour) {
+                g.setColor(Color.BLACK);
+                num2 = 0 - (nombreJour) + i + getJour();
+                label = new TextLabel(num2.toString(), CENTRE_X, CENTRE_Y, angle);
+                label.draw(g, RAYON_JOUR + 3, 3);
+            } else {
+                g.setColor(i == 0 ? Color.RED : Color.BLACK);
+                num2 = num + jour;
+                label = new TextLabel(num2.toString(), CENTRE_X, CENTRE_Y, angle);
+                label.draw(g, RAYON_JOUR + 3, 3);
+            }
+            num += 1;
         }
     }
 
@@ -177,7 +223,7 @@ public class DisqueHoraire extends JPanel {
 
         for (int i = 0; i < 48; i++) {
             // Calcul de l'angle (en radians)
-            double angle = Math.toRadians(((i * 360.0) / 48)+3.75);
+            double angle = Math.toRadians(((i * 360.0) / 48) + 3.75);
 
             // calcul de x1, y1, x2 et y2
             x1 = (int) (CENTRE_X + RAYON_HEURES * cos(angle));
@@ -190,48 +236,54 @@ public class DisqueHoraire extends JPanel {
             g.drawLine(x1, y1, x2, y2);
 
             // Afficher les heures
+            g.setColor(i == 0 ? Color.RED : Color.BLACK);
+            label = new TextLabel("blabla", CENTRE_X, CENTRE_Y, angle);
+            label.draw(g, RAYON_HEURES, 0);
         }
     }
 
     private void afficherCurseur(Graphics g) {
+        // pour colorier les différentes zones du DisqueHoraire
 
-        g.setColor(Color.white);
+        // pour colorier l'ensemble des heures
+        g.setColor(Color.GRAY);
         g.fillOval(20, 20, 2 * RAYON_CONTOUR, 2 * RAYON_CONTOUR);
-        // Section pour les heures
-        g.setColor(new Color(192, 192, 192, 127));
+        // pour colorier les heures selectionnées
+        g.setColor(Color.LIGHT_GRAY);
         g.fillArc(20, 20,
                 2 * RAYON_CONTOUR,
                 2 * RAYON_CONTOUR,
                 (int) (-360 / 48.0 - 3.75), (3 * 360) / 48);
 
-        g.setColor(Color.WHITE);
+        // pour colorier l'ensemble des mois
+        g.setColor(Color.GRAY);
         g.fillOval(20 + (RAYON_CONTOUR - RAYON_HEURES),
                 20 + (RAYON_CONTOUR - RAYON_HEURES),
                 2 * RAYON_HEURES,
                 2 * RAYON_HEURES);
-
-        // Section pour le mois
-        g.setColor(new Color(192, 192, 192, 127));
+        // pour colorier les mois selectionnées
+        g.setColor(Color.LIGHT_GRAY);
         g.fillArc(20 + (RAYON_CONTOUR - RAYON_HEURES),
                 20 + (RAYON_CONTOUR - RAYON_HEURES),
                 2 * RAYON_HEURES,
                 2 * RAYON_HEURES, -15, 360 / 12);
 
-        g.setColor(Color.WHITE);
+        // pour colorier l'ensemble des jours
+        g.setColor(Color.GRAY);
         g.fillOval(20 + (RAYON_CONTOUR - RAYON_MOIS),
                 20 + (RAYON_CONTOUR - RAYON_MOIS),
                 2 * RAYON_MOIS,
                 2 * RAYON_MOIS);
-
-        // Section pour le jour
+        // pour colorier le jour selectionné
         int nbJours = NB_JOURS[mois] + ((mois == 1) && bissextile ? 1 : 0);
-        g.setColor(new Color(192, 192, 192, 127));
+        g.setColor(Color.LIGHT_GRAY);
         g.fillArc(20 + (RAYON_CONTOUR - RAYON_MOIS),
                 20 + (RAYON_CONTOUR - RAYON_MOIS),
                 2 * RAYON_MOIS,
                 2 * RAYON_MOIS, -180 / nbJours, 360 / nbJours);
 
-        g.setColor(Color.WHITE);
+        // pour colorier l'interieur
+        g.setColor(Color.DARK_GRAY);
         g.fillOval(20 + (RAYON_CONTOUR - RAYON_JOUR),
                 20 + (RAYON_CONTOUR - RAYON_JOUR),
                 2 * RAYON_JOUR,

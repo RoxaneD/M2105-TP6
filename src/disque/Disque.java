@@ -28,6 +28,8 @@ public class Disque extends JPanel {
         DisqueHoraire disqueH = new DisqueHoraire();
         setDisque(disqueH);
         setDate();
+        // pour colorier le fond du DisqueHoraire
+        this.setBackground(Color.DARK_GRAY);
 
         // (1) Creer les boutons pour controler le disque horaire
         setMoisPred(new JButton("< Mois précédent"));
@@ -52,6 +54,9 @@ public class Disque extends JPanel {
         JPanel conteneurBoutons = new JPanel(new BorderLayout());
         conteneurBoutons.add(boutons, BorderLayout.NORTH);
         this.add(conteneurBoutons, BorderLayout.EAST);
+        
+        // pour colorier le fond des boutons
+        conteneurBoutons.setBackground(Color.DARK_GRAY);
         
         // (3) S'abonner aux boutons pour controler la date : utiliser
         // les méthodes ci-dessous

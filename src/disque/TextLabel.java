@@ -16,6 +16,7 @@ public class TextLabel {
     private double angle;
     
     public TextLabel(String text, int x, int y, double angle) {
+        // x : abcisse du centre du cercle | y : ordonnée du centre du cercle
         this.x = x;
         this.y = y;
         this.text = text;
@@ -23,6 +24,7 @@ public class TextLabel {
     }
     
     public void draw(Graphics g, int dx, int dy) {
+        // dx : longueur par rapport au centre | dy : longueur par rapport au train de délimitation (mettre 0)
         Graphics2D g2 = (Graphics2D) g;
         
         AffineTransform transform;
