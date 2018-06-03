@@ -29,6 +29,10 @@ public class DisqueHoraire extends JPanel {
     private final int[] NB_JOURS = {31, 28, 31, 30, 31, 30,
         31, 31, 30, 31, 30, 31};
 
+    private final int[] HEURES = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
+
+    private final int[] MINUTES = {00, 30};
+
     private static final int RAYON_JOUR = 50;
     private static final int RAYON_MOIS = RAYON_JOUR + 100;
     private static final int RAYON_HEURES = RAYON_MOIS + 100;
@@ -218,8 +222,14 @@ public class DisqueHoraire extends JPanel {
     }
 
     private void afficherHeures(Graphics g) {
-        TextLabel label;
+        TextLabel labelHeure;
+        TextLabel labelMinute;
         int x1, y1, x2, y2;
+
+        Integer i1;
+        Integer i2;
+        int i3;
+        int heureActuelle = heure;
 
         for (int i = 0; i < 48; i++) {
             // Calcul de l'angle (en radians)
@@ -236,9 +246,35 @@ public class DisqueHoraire extends JPanel {
             g.drawLine(x1, y1, x2, y2);
 
             // Afficher les heures
-            g.setColor(i == 0 ? Color.RED : Color.BLACK);
-            label = new TextLabel("blabla", CENTRE_X, CENTRE_Y, angle);
-            label.draw(g, RAYON_HEURES, 0);
+            
+            i3 = i;
+            if (i3 != 0 || i3 != 1) {
+                i3 = i3 % 2;
+            }
+
+            if (minutes == MINUTES[0]) {
+                i2 = MINUTES[i3];
+            } else {
+                i2 = MINUTES[(i3 + 1) % 2];
+            }
+
+            if (heureActuelle >= 24) {
+                i1 = HEURES[24-heureActuelle];
+            } else {
+                i1 = HEURES[i / 2];
+            }
+            
+            if (i2 == minutes && i1 == heure){
+                g.setColor(Color.RED);
+            } else {
+                g.setColor(Color.BLACK);
+            }
+            
+
+            labelHeure = new TextLabel(i1 + "h", CENTRE_X, CENTRE_Y, angle);
+            labelHeure.draw(g, RAYON_HEURES, 0);
+            labelMinute = new TextLabel(i2.toString(), CENTRE_X, CENTRE_Y, angle);
+            labelMinute.draw(g, RAYON_HEURES + 20, 0);
         }
     }
 
